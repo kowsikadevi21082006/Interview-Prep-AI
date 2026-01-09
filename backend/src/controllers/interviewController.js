@@ -177,8 +177,44 @@ const endInterview = async (req, res) => {
     }
 };
 
+/**
+ * Fetches the evaluation report for a session.
+ * GET /api/interview/:interviewId/report
+ */
+const getEvaluationReport = async (req, res) => {
+    try {
+        const { interviewId } = req.params;
+
+        const session = await InterviewSession.findById(interviewId);
+        if (!session) {
+            return res.status(404).json({ message: 'Interview session not found.' });
+        }
+
+        if (!session.endTime) {
+            return res.status(400).json({ message: 'Interview has not ended yet.' });
+        }
+
+        const report = {
+            technicalDepth: session.scores.technicalDepth,
+            clarity: session.scores.clarity,
+            confidence: session.scores.confidence,
+            strengths: session.strengths,
+            weaknesses: session.weaknesses,
+            suggestedImprovements: session.suggestedImprovements,
+            modelAnswers: session.modelAnswers
+        };
+
+        res.status(200).json({ report });
+
+    } catch (error) {
+        console.error('Get Report Error:', error);
+        res.status(500).json({ message: 'Failed to fetch evaluation report.' });
+    }
+};
+
 module.exports = {
     startInterview,
     answerQuestion,
-    endInterview
+    endInterview,
+    getEvaluationReport
 };
