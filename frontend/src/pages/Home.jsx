@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { interviewAPI } from '../services/api';
-import { Briefcase, Activity, Rocket, ChevronRight } from 'lucide-react';
+import { Brain, Sparkles, Target, Zap } from 'lucide-react';
 
 const Home = () => {
     const [role, setRole] = useState('');
@@ -27,91 +27,108 @@ const Home = () => {
         }
     };
 
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black p-4 md:p-6">
-            <div className="w-full max-w-xl bg-slate-900/40 backdrop-blur-xl border border-slate-800 rounded-3xl shadow-2xl overflow-hidden">
-                <div className="p-8 md:p-12 space-y-8">
-                    {/* Header Section */}
-                    <div className="text-center space-y-3">
-                        <div className="inline-flex items-center justify-center p-3 bg-blue-500/10 rounded-2xl mb-2">
-                            <Rocket className="w-8 h-8 text-blue-400" />
-                        </div>
-                        <h1 className="text-4xl font-extrabold text-white tracking-tight">
-                            AI Mock Interview
-                        </h1>
-                        <p className="text-slate-400 text-lg max-w-sm mx-auto">
-                            Boost your confidence with realistic, role-specific interview simulation.
-                        </p>
-                    </div>
+    const features = [
+        { icon: <Sparkles className="text-amber-500" />, title: "AI-Powered", desc: "Intelligent follow-ups tailored to your responses." },
+        { icon: <Target className="text-emerald-500" />, title: "Role-Specific", desc: "Questions mapped to industry-standard benchmarks." },
+        { icon: <Zap className="text-blue-500" />, title: "Instant Feedback", desc: "Detailed performance reports and scoring." }
+    ];
 
-                    <form onSubmit={handleStart} className="space-y-8">
-                        {/* Input Group: Role */}
-                        <div className="space-y-2">
-                            <label className="text-sm font-semibold text-slate-300 ml-1 uppercase tracking-wider">
-                                Desired Job Role
-                            </label>
-                            <div className="relative group">
-                                <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
+    return (
+        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-80px)] px-4">
+            <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl w-full">
+                {/* Left Side: Hero Text */}
+                <div className="space-y-8 text-center lg:text-left animate-fade-in">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-color)]/10 text-[var(--accent-color)] text-sm font-semibold mb-2">
+                        <Brain size={16} />
+                        Next-Gen Interview Prep
+                    </div>
+                    <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-[var(--text-primary)] leading-tight">
+                        Ace Your Next <br />
+                        <span className="text-[var(--accent-color)] italic">Dream Job</span> Interview
+                    </h1>
+                    <p className="text-lg text-[var(--text-secondary)] max-w-xl mx-auto lg:mx-0">
+                        Practice with our advanced AI interviewer that adapts to your skill level and provides deep technical insights to help you grow.
+                    </p>
+
+                    <div className="grid sm:grid-cols-3 gap-6 pt-4">
+                        {features.map((f, i) => (
+                            <div key={i} className="flex flex-col items-center lg:items-start space-y-2">
+                                <div className="p-2 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)]">
+                                    {f.icon}
+                                </div>
+                                <h3 className="font-bold text-sm">{f.title}</h3>
+                                <p className="text-xs text-[var(--text-secondary)]">{f.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Right Side: Form */}
+                <div className="w-full flex justify-center lg:justify-end animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                    <div className="w-full max-w-md p-8 rounded-3xl border border-[var(--border-color)] bg-[var(--card-bg)] shadow-xl shadow-black/5">
+                        <div className="mb-8">
+                            <h2 className="text-2xl font-bold">Get Started</h2>
+                            <p className="text-[var(--text-secondary)] text-sm">Configure your practice session.</p>
+                        </div>
+
+                        <form onSubmit={handleStart} className="space-y-6">
+                            <div className="space-y-2">
+                                <label className="text-sm font-bold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2">
+                                    Target Job Role
+                                </label>
                                 <input
                                     type="text"
-                                    placeholder="e.g. Senior Frontend Engineer"
+                                    placeholder="e.g. Full Stack Developer"
                                     value={role}
                                     onChange={(e) => setRole(e.target.value)}
-                                    className="w-full pl-12 pr-4 py-4 bg-slate-950/50 border border-slate-700/50 rounded-2xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all text-white text-lg placeholder:text-slate-600 shadow-inner"
+                                    className="input-field"
                                     required
                                 />
                             </div>
-                        </div>
 
-                        {/* Input Group: Level */}
-                        <div className="space-y-2">
-                            <label className="text-sm font-semibold text-slate-300 ml-1 uppercase tracking-wider">
-                                Seniority Level
-                            </label>
-                            <div className="relative group">
-                                <Activity className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
-                                <select
-                                    value={level}
-                                    onChange={(e) => setLevel(e.target.value)}
-                                    className="w-full pl-12 pr-4 py-4 bg-slate-950/50 border border-slate-700/50 rounded-2xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all text-white text-lg appearance-none cursor-pointer shadow-inner"
-                                >
-                                    <option value="Intern">Intern</option>
-                                    <option value="Junior">Junior</option>
-                                    <option value="Mid-Level">Mid-Level</option>
-                                    <option value="Senior">Senior</option>
-                                    <option value="Lead/Staff">Lead / Staff</option>
-                                </select>
-                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                    <ChevronRight className="w-5 h-5 text-slate-500 rotate-90" />
+                            <div className="space-y-2">
+                                <label className="text-sm font-bold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2">
+                                    Your Experience Level
+                                </label>
+                                <div className="grid grid-cols-3 gap-2">
+                                    {['Intern', 'Junior', 'Mid', 'Senior', 'Lead'].map((l) => (
+                                        <button
+                                            key={l}
+                                            type="button"
+                                            onClick={() => setLevel(l)}
+                                            className={`px-3 py-2 rounded-lg text-xs font-bold transition-all border ${level === l
+                                                    ? 'bg-[var(--accent-color)] border-[var(--accent-color)] text-white'
+                                                    : 'bg-[var(--bg-secondary)] border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--accent-color)] hover:text-[var(--accent-color)]'
+                                                }`}
+                                        >
+                                            {l}
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Submit Button */}
-                        <div className="pt-4">
                             <button
                                 type="submit"
                                 disabled={loading || !role}
-                                className="w-full py-5 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-bold text-xl rounded-2xl transition-all shadow-xl shadow-blue-500/20 active:scale-[0.98] flex items-center justify-center group"
+                                className="btn-primary w-full py-4 text-base"
                             >
                                 {loading ? (
-                                    <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+                                    <span className="flex items-center gap-2">
+                                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                        Preparing...
+                                    </span>
                                 ) : (
-                                    <>
-                                        <span>Begin Session</span>
-                                        <ChevronRight className="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" />
-                                    </>
+                                    'Begin Interview Session'
                                 )}
                             </button>
-                        </div>
-                    </form>
-
-                    {/* Footer Info */}
-                    <p className="text-center text-slate-500 text-sm">
-                        Powered by Cerebras AI • Fast & Contextual
-                    </p>
+                        </form>
+                    </div>
                 </div>
             </div>
+
+            <p className="mt-12 text-sm text-[var(--text-secondary)] flex items-center gap-2">
+                <Target size={14} /> Trusted by 10,000+ candidates preparing for top tech companies
+            </p>
         </div>
     );
 };
